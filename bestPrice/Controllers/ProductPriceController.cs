@@ -19,6 +19,8 @@ namespace bestPrice.Controllers
             // write click and add empty razer view(cshtml) in views 
             var productPrice = await _context.ProductPrices.OrderByDescending(m => m.Price).ToListAsync();
             return View(productPrice);
+            //var product = await _context.Products.OrderByDescending(m => m.Name).ToListAsync();
+            //return View(product);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
