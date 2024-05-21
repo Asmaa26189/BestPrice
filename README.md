@@ -21,9 +21,9 @@ Define project scope to get all prices in markets to compare accurately.
 - CSS
 
 ### Database Tables:
-**item**(code-name-description-qrCode-image-barcode)
-**market**(code-name-description-googleMapLink-country-city-region-address)
-**price**(marketId-itemId-price)
+- **item**(code-name-description-qrCode-image-barcode)
+- **market**(code-name-description-googleMapLink-country-city-region-address)
+- **price**(marketId-itemId-price)
 
 ### Challenges:
 **What challenges have you discovered about your project that were not obvious when you did your research?**
@@ -49,7 +49,6 @@ Define project scope to get all prices in markets to compare accurately.
 
 ### Authors:
 **This file lists all contributors to the repository**
-
-Asmaa Hesham <engasmaahesham@gmail.com>
-Salwa Mahmoud <sma.mam9@gmail.com>
+- Asmaa Hesham <engasmaahesham@gmail.com>
+- Salwa Mahmoud <sma.mam9@gmail.com>
 	
