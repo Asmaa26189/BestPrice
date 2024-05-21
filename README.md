@@ -27,11 +27,15 @@ Define project scope to get all prices in markets to compare accurately.
 
 ### Challenges:
 - **What challenges have you discovered about your project that were not obvious when you did your research?**
-  &emsp; There is no trust in the data as it is input from the end user. 
+  <br /> 
+  &emsp; There is no trust in the data as it is input from the end user.
+  <br /> 
   &emsp; Enter more than once repeatedly.
 - **How have you had to change your plan to adapt to these unearthed challenges?**
+  <br /> 
   &emsp; Repeating the same price for the same place will result in a large number of entries for the price, and therefore there will be confidence that the data is correct.
 - **Describe any unexpected non-technical challenges?**
+  <br /> 
   &emsp; Making the website work for different countries.
 
 ### Collaboration:
