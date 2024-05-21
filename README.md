@@ -26,12 +26,12 @@ Define project scope to get all prices in markets to compare accurately.
 - **price**(marketId-itemId-price)
 
 ### Challenges:
-**What challenges have you discovered about your project that were not obvious when you did your research?**
+- **What challenges have you discovered about your project that were not obvious when you did your research?**
 - There is no trust in the data as it is input from the end user. 
 - Enter more than once repeatedly.
-**How have you had to change your plan to adapt to these unearthed challenges?**
--Repeating the same price for the same place will result in a large number of entries for the price, and therefore there will be confidence that the data is correct.
-**Describe any unexpected non-technical challenges?**
+- **How have you had to change your plan to adapt to these unearthed challenges?**
+- Repeating the same price for the same place will result in a large number of entries for the price, and therefore there will be confidence that the data is correct.
+- **Describe any unexpected non-technical challenges?**
 - Making the website work for different countries.
 
 ### Collaboration:
