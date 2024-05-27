@@ -1,5 +1,4 @@
 # Best Price Project
-## Week 1: 
 ### Making Progress
 **Project Overview:**
 This project aims to compare item prices between different markets, to help the user to get the lowest price for the desired item.
