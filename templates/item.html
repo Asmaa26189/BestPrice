@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% block body %}
+
+
+        <!-- Modal Search Start -->
+        <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content rounded-0">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex align-items-center">
+                        <div class="input-group w-75 mx-auto d-flex">
+                            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Search End -->
+
+
+        <!-- Single Page Header start -->
+        <div class="container-fluid page-header py-5" style="background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(static/img/items.jpg);background-repeat: round;">
+            <h1 class="text-center text-white display-6">Item</h1>
+       <!--      <ol class="breadcrumb justify-content-center mb-0">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                <li class="breadcrumb-item active text-white">Item</li>
+            </ol> -->
+        </div>
+        <!-- Single Page Header End -->
+
+
+        <!-- Item Page Start -->
+        <div class="container-fluid py-5">
+            <div class="container py-5">
+                <h1 class="mb-4">Item details</h1>
+                <form action="#">
+                    <div class="row g-5">
+                        <div class="col-md-12 col-lg-6 col-xl-7">
+                            <div class="row">
+                                <div class="col-md-12 col-lg-6">
+                                    <div class="form-item w-100">
+                                        <label class="form-label my-3">Code<sup>*</sup></label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-lg-6">
+                                    <div class="form-item w-100">
+                                        <label class="form-label my-3">Name<sup>*</sup></label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">Barcode<sup>*</sup></label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="form-item">
+                                <label class="form-label my-3">Qrcode <sup>*</sup></label>
+                                <input type="text" class="form-control" >
+                            </div>
+                            
+                            <hr>
+                            <div class="form-item">
+                                <textarea name="text" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Notes (Optional)"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6 col-xl-5">
+                            <div class="d-flex align-items-center mt-4">
+                                <img src="static/img/item.png" class="img-fluid rounded-circle" style="object-fit: none;width: 500px; height: 350px;" alt="">
+                            </div>
+                           
+                            <div class="row g-4 text-center align-items-center justify-content-center pt-4">
+                                <button type="button" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Change Image</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Item Page End -->
+
+
+      {% endblock %}
