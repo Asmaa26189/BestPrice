@@ -1,4 +1,5 @@
 # Best Price Project
+## Week 1:
 ### Making Progress
 **Project Overview:**
 This project aims to compare item prices between different markets, to help the user to get the lowest price for the desired item.
@@ -55,5 +56,16 @@ Define project scope to get all prices in markets to compare accurately.
 - Asmaa Hesham <engasmaahesham@gmail.com>
 - Salwa Mahmoud <sma.mam9@gmail.com>
 	
+## Week 2:
+### Progress
+- Our rate in the progress we have made this week is  **10/10**
+- We have finished all front-end code and starting and creating database.
+- Parts of your project are completed as planned: all design.
+- Aspects of your project are incomplete: Databases and Back-end
 
-![image](https://github.com/Asmaa26189/BestPrice/assets/108579670/57c5d28e-ffb5-43e5-9320-c3838d1a11e9)
+### Challenges:
+- There is no difficult technical challenge.
+- There is no difficult non-technical challenge.
+
+### Screenshots:
+
