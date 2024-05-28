@@ -69,3 +69,7 @@ Define project scope to get all prices in markets to compare accurately.
 
 ### Screenshots:
 
+![Untitled-1](https://github.com/Asmaa26189/BestPrice/assets/108579670/1ac04cf4-d5f3-4eb1-8808-b0e6acebea2e)
+
+![Untitled-2](https://github.com/Asmaa26189/BestPrice/assets/108579670/990abee9-fc7e-4e99-b21c-56a6aaed8816)
+
