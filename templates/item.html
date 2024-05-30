@@ -19,35 +19,35 @@
         <div class="container-fluid py-5">
             <div class="container py-5">
                 <h1 class="mb-4">Item details</h1>
-                <form action="/insertItem" method="post">
+                <form action="/insertItem" method="post" enctype="multipart/form-data">
                     <div class="row g-5">
                         <div class="col-md-12 col-lg-6 col-xl-7">
                             <div class="row">
                                 <div class="col-md-12 col-lg-6">
                                     <div class="form-item w-100">
                                         <label class="form-label my-3">Code<sup>*</sup></label>
-                                        <input type="text" class="form-control" name="code" required >
+                                        <input type="text" class="form-control" value="{{ data[1] if data else '' }}" name="code" required >
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-lg-6">
                                     <div class="form-item w-100">
                                         <label class="form-label my-3">Name<sup>*</sup></label>
-                                        <input type="text" class="form-control" name="name" required >
+                                        <input type="text" class="form-control" value="{{ data[2] if data else '' }}" name="name" required >
                                     </div>
                                 </div>
                             </div>
                             <div class="form-item">
                                 <label class="form-label my-3">Barcode<sup>*</sup></label>
-                                <input type="text" class="form-control" name="barcode" required >
+                                <input type="text" class="form-control" value="{{ data[5] if data else '' }}" name="barcode" required >
                             </div>
-                            <div class="form-item">
+                            <div class="form-item" hidden="hidden">
                                 <label class="form-label my-3">Qrcode <sup>*</sup></label>
-                                <input type="text" class="form-control" name="qrCode" required >
+                                <input type="text" class="form-control" name="qrCode" >
                             </div>
                             
                             <hr>
                             <div class="form-item">
-                                <textarea class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Notes (Optional)" name="description"></textarea>
+                                <textarea class="form-control"  spellcheck="false" cols="30" rows="11" placeholder="Notes (Optional)" name="description">{{ data[4] if data else '' }}</textarea>
                             </div>
                               <div class="row">
                              <div class="col-md-12 col-lg-12">
@@ -61,12 +61,15 @@
                         </div>
                         <div class="col-md-12 col-lg-6 col-xl-5">
                             <div class="d-flex align-items-center mt-4">
-                                <img src="static/img/item.png" class="img-fluid rounded-circle" style="object-fit: none;width: 500px; height: 350px;" alt="">
-                                <input type="text" name="image" hidden="hidden">
+                                {% if data %}
+                                 <img id="blah" src="data:;base64,{{ data[6] }}" class="img-fluid rounded-circle" style="object-fit: none;width: 500px; height: 350px;" alt="" >
+                                {% else %}
+                                <img id="blah" src="static/img/item.png" class="img-fluid rounded-circle" style="object-fit: none;width: 500px; height: 350px;" alt="" >
+                                {% endif %}
                             </div>
                            
                             <div class="row g-4 text-center align-items-center justify-content-center pt-4">
-                                <button type="button" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Change Image</button>
+                                <input  id= "bannerImg" type="file" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary" name="image" />
                             </div>
                         </div>
                     </div>
@@ -75,5 +78,35 @@
         </div>
         <!-- Item Page End -->
 
+<script type="text/javascript">
+//     function getBase64Image(img) {
+//     var canvas = document.createElement("canvas");
+//     canvas.width = img.width;
+//     canvas.height = img.height;
 
-      {% endblock %}
+//     var ctx = canvas.getContext("2d");
+//     ctx.drawImage(img, 0, 0);
+
+//     var dataURL = canvas.toDataURL("image/png");
+
+//     return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+// }
+    function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      $('#blah').attr('src', e.target.result);
+    };
+
+    reader.readAsDataURL(input.files[0]);
+  }
+//   alert('x')
+//   bannerImage = document.getElementById('bannerImg');
+// imgData = getBase64Image(bannerImage);
+// alert(imgData)
+// localStorage.setItem("k.jpg", imgData);
+// alert('after')
+}
+</script>
+{% endblock %}

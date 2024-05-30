@@ -26,13 +26,21 @@
                                 <div class="col-md-12 col-lg-6">
                                     <div class="form-item w-100">
                                         <label class="form-label my-3">Select Item<sup>*</sup></label>
-                                        <select class="form-control"   id ="select_Item" required name="itemId"></select>
+                                        <select class="form-control"   id ="select_Item" required name="itemId">
+                                            {% for item in items %}
+                                                <option value="{{item[0]}}">{{item[2]}}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-lg-6">
                                     <div class="form-item w-100">
                                         <label class="form-label my-3">Select Market <sup>*</sup></label>
-                                        <select class="form-control"   id ="select_Market" required name="marketId"></select>
+                                        <select class="form-control"   id ="select_Market" required name="marketId">
+                                            {% for market in markets %}
+                                                <option value="{{market[0]}}">{{market[2]}}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </div>
                             </div>

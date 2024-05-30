@@ -1,4 +1,9 @@
-from flask import Flask, render_template, render_template_string, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template
+from flask import render_template_string
+from flask import request, redirect
+from flask import url_for, session, jsonify
+from flask import send_file
+from base64 import b64encode
 import mysql.connector
 
 app = Flask(__name__)
@@ -6,57 +11,74 @@ app = Flask(__name__)
 conn = mysql.connector.connect(host="localhost", user="root", password="root")
 cursor = conn.cursor()
 query = "DROP DATABASE BestPrice;CREATE DATABASE IF NOT EXISTS BestPrice;"
-cursor.execute(query,multi=True)
+# query = "CREATE DATBASE IF NOT EXISTS BestPrice;"
+cursor.execute(query, multi=True)
 
-mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password="root",
-  database="BestPrice"
-)
+mydb = mysql.connector.connect(host="localhost",
+                               user="root",
+                               password="root",
+                               database="BestPrice")
 mycursor = mydb.cursor()
 
 
 def init_db():
-    sql = """CREATE TABLE IF NOT EXISTS items (id INT AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(255), name VARCHAR(255),description NVARCHAR(N),
-    qrCode  NVARCHAR(N),barcode  NVARCHAR(N), image  NVARCHAR(N)); """
+    sql = """CREATE TABLE IF NOT EXISTS items
+     (id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(255), name VARCHAR(255),description VARCHAR(5000),
+    qrCode  VARCHAR(5000),barcode  VARCHAR(5000), image  LONGBLOB ); """
     mycursor.execute(sql)
     mydb.commit()
 
-    sql = """CREATE TABLE IF NOT EXISTS markets (id INT AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(255), name VARCHAR(255),description NVARCHAR(N),
+    sql = """CREATE TABLE IF NOT EXISTS markets
+     (id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(255), name VARCHAR(255),description VARCHAR(5000),
     country VARCHAR(255),city VARCHAR(255), region VARCHAR(255),
-    googleLink  NVARCHAR(N), address  NVARCHAR(N)); """
+    googleLink  VARCHAR(5000), address  VARCHAR(5000)); """
     mycursor.execute(sql)
     mydb.commit()
 
-    sql = """CREATE TABLE IF NOT EXISTS prices (id INT AUTO_INCREMENT PRIMARY KEY,
-    itemId INT, marketId INT,price INT,description NVARCHAR(N)); """
+    sql = """CREATE TABLE IF NOT EXISTS prices
+     (id INT AUTO_INCREMENT PRIMARY KEY,
+    itemId INT, marketId INT,price INT,description VARCHAR(5000)); """
     mycursor.execute(sql)
     mydb.commit()
+
 
 def insert_item(code, name, description, qrCode, image, barcode):
-    sql = """INSERT INTO items (code, name, description, qrCode, image, barcode)
-                 VALUES ('{}', '{}', '{}', '{}', '{}', '{}');""".format(code, name, description, qrCode, image, barcode)
-    print(sql)
-    mycursor.execute(sql)
-    mydb.commit()
-    # print(mycursor.rowcount, "record inserted.")
+    try:
+        sql = ''
+        print(sql)
+        mycursor.execute("""INSERT INTO items
+         (code, name, description, qrCode, image, barcode)
+         VALUES (%s,%s,%s,%s, %s,%s);""", (code, name, description, qrCode,
+                                           image, barcode))
+        mydb.commit()
+        # print(mycursor.rowcount, "record inserted.")
+    except Exception as e:
+        print(f"Error while connecting to MySQL: {e}")
 
-def insert_market(code, name, description, googleLink, country, city, region,address):
-    sql = """INSERT INTO items (code, name, description, googleLink, country, city, region,address)
-                 VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');""".format(code, name, description,  googleLink, country, city, region,address)
+
+def insert_market(code, name, description, googleLink,
+                  country, city, region, address):
+    sql = """INSERT INTO markets (code, name, description,
+     googleLink, country, city, region,address)
+     VALUES ('{}', '{}', '{}', '{}',
+      '{}', '{}', '{}', '{}');""".format(code, name,
+                                         description, googleLink,
+                                         country, city, region, address)
     print(sql)
     mycursor.execute(sql)
     mydb.commit()
+
 
 def insert_price(itemId, marketId, price, description):
-    sql = """INSERT INTO items (itemId, marketId, price, description)
-                 VALUES ({}, {}, {}, '{}');""".format(itemId, marketId, price, description)
+    sql = """INSERT INTO prices (itemId, marketId, price, description)
+                 VALUES ({}, {}, {}, '{}');""".format(itemId, marketId,
+                                                      price, description)
     print(sql)
     mycursor.execute(sql)
     mydb.commit()
+
 
 def select_items():
     sql = """SELECT * FROM items;"""
@@ -66,13 +88,15 @@ def select_items():
     #     print(x)
     return list(myresult)
 
-def select_item():
-    sql = """SELECT * FROM items WHERE id = 1;"""
+
+def select_item(id):
+    sql = """SELECT * FROM items WHERE id = {};""".format(id)
     mycursor.execute(sql)
     myresult = mycursor.fetchall()
     # for x in myresult:
-    #     print(x) 
+    #     print(x)
     return list(myresult)
+
 
 def select_markets():
     sql = """SELECT * FROM markets;"""
@@ -82,44 +106,112 @@ def select_markets():
     #     print(x)
     return list(myresult)
 
-def select_market():
-    sql = """SELECT * FROM markets WHERE id = 1;"""
+
+def select_market(id):
+    sql = """SELECT * FROM markets WHERE id = {};""".format(id)
     mycursor.execute(sql)
     myresult = mycursor.fetchall()
     # for x in myresult:
-    #     print(x) 
+    #     print(x)
     return list(myresult)
 
+
+def select_prices(searchText):
+    sql = """SELECT items.image, items.name,prices.price,markets.name,
+            items.id as itemId ,markets.id as marketId
+            FROM prices
+            JOIN markets ON prices.marketId=markets.id
+            JOIN items ON prices.itemId=items.id WHERE items.name LIKE '%{}%'
+            OR items.barcode LIKE '%{}%' OR
+            items.code LIKE '%{}%';""".format(searchText, searchText,
+                                              searchText)
+    mycursor.execute(sql)
+    myresult = mycursor.fetchall()
+    # for x in myresult:
+    #     print(x)
+    return list(myresult)
+
+
 init_db()
-# insert_ibtem()
-print('select all items')
-select_items()
-print('one item')
-select_one_item()
 
 
-@app.route('/insertItem', methods=['POST','GET'])
+@app.route('/insertItem', methods=['POST', 'GET'])
 def insertItem():
-    if(request.form):
-        insert_item(request.form.get('code'),request.form.get('name'),request.form.get('description'),request.form.get('qrCode'),request.form.get('image'),request.form.get('barcode'))
+    if (request.form):
+        if 'image' not in request.files:
+            return "No image part in the request", 400
+
+        file = request.files['image']
+        if file.filename == '':
+            return "No image selected for uploading", 400
+
+        if file:
+            image_data = file.read()
+        # print(request.form.get('image'))
+        # with open(request.form.get('image'), 'rb') as file:
+        #     binaryData = file.read()
+
+        insert_item(request.form.get('code'),
+                    request.form.get('name'),
+                    request.form.get('description'),
+                    request.form.get('qrCode'),
+                    image_data, request.form.get('barcode'))
     return render_template('item.html')
 
-@app.route('/insertMarket', methods=['POST','GET'])
+
+@app.route('/insertMarket', methods=['POST', 'GET'])
 def insertMarket():
-    if(request.form):
-        insert_market(request.form.get('code'),request.form.get('name'),request.form.get('description'),request.form.get('googleLink'),request.form.get('country'),request.form.get('city'),request.form.get('region'),request.form.get('address'))
+    print(request.form)
+    if (request.form):
+        insert_market(request.form.get('code'),
+                      request.form.get('name'),
+                      request.form.get('description'),
+                      request.form.get('googleLink'),
+                      request.form.get('country'),
+                      request.form.get('city'),
+                      request.form.get('region'),
+                      request.form.get('address'))
     return render_template('market.html')
 
-@app.route('/insertPrice', methods=['POST','GET'])
+
+@app.route('/insertPrice', methods=['POST', 'GET'])
 def insertPrice():
-    if(request.form):
-        insert_price(request.form.get('itemId'),request.form.get('marketId'),request.form.get('price'),request.form.get('description'))
+    if (request.form):
+        insert_price(request.form.get('itemId'),
+                     request.form.get('marketId'),
+                     request.form.get('price'),
+                     request.form.get('description'))
     return render_template('addPrice.html')
 
 
 @app.route('/')
 def mainUsers():
     return render_template('index.html')
+
+
+@app.route('/item/<int:id>')
+def item_id(id):
+    print(id)
+    data = []
+    itemData = select_item(id)
+    for x in itemData:
+        # The returned data will be a list of list
+        image = x[6]
+        # Decode the string
+        # image = base64.b64decode(image)
+        image = b64encode(image).decode("utf-8")
+        data.append([x[0], x[1], x[2], x[3], x[4], x[5], image])
+        print(len(data))
+    if len(data) > 0 :
+        return render_template('item.html', data=data[0])
+    return render_template('item.html')
+
+
+
+@app.route('/market/<id>', methods=['GET'])
+def market_id(id: int):
+    data = select_market(id)
+    return render_template('market.html', data=data[0])
 
 
 @app.route('/item')
@@ -134,12 +226,26 @@ def market():
 
 @app.route('/search')
 def search():
-    return render_template('search.html')
+    prices = []
+    if (request.args):
+        searchText = request.args.get('searchText')
+        pricesData = select_prices(searchText)
+        for data in pricesData:
+            # The returned data will be a list of list
+            image = data[0]
+            # Decode the string
+            # image = base64.b64decode(image)
+            image = b64encode(image).decode("utf-8")
+            prices.append([image, data[1], data[2], data[3], data[4], data[5]])
+    return render_template('search.html', prices=prices)
 
 
 @app.route('/addPrice')
 def addPrice():
-    return render_template('addPrice.html')
+    items = select_items()
+    markets = select_markets()
+    print(items)
+    return render_template('addPrice.html', markets=markets, items=items)
 
 
 if __name__ == "__main__":

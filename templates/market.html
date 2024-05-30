@@ -25,49 +25,49 @@
                                 <div class="col-md-12 col-lg-6">
                                     <div class="form-item w-100">
                                         <label class="form-label my-3">Code<sup>*</sup></label>
-                                        <input type="text" class="form-control" required name = "code">
+                                        <input type="text" class="form-control" value="{{ data[1] if data else '' }}" required name = "code">
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-lg-6">
                                     <div class="form-item w-100">
                                         <label class="form-label my-3">Name<sup>*</sup></label>
-                                        <input type="text" class="form-control" required name = "name" >
+                                        <input type="text" class="form-control" value="{{ data[2] if data else '' }}"required name = "name" >
                                     </div>
                                 </div>
                             </div>
                             <div class="form-item">
                                 <label class="form-label my-3">Google Map Link</label>
-                                <input type="text" class="form-control" name ="googleLink">
+                                <input type="text" class="form-control" value="{{ data[7] if data else '' }}" name ="googleLink">
                             </div>
                             <div class="row">
                                 <div class="col-md-12 col-lg-4">
                                     <div class="form-item w-100">
                                         <label class="form-label my-3">Country<sup>*</sup></label>
-                                        <input type="text" class="form-control" required name = "country">
+                                        <input type="text" class="form-control" value="{{ data[4] if data else '' }}" required name = "country">
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-lg-4">
                                     <div class="form-item w-100">
                                         <label class="form-label my-3">City<sup>*</sup></label>
-                                        <input type="text" class="form-control" required name = "city">
+                                        <input type="text" class="form-control" value="{{ data[5] if data else '' }}" required name = "city">
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-lg-4">
                                     <div class="form-item w-100">
                                         <label class="form-label my-3">Region<sup>*</sup></label>
-                                        <input type="text" class="form-control" required name = "region">
+                                        <input type="text" class="form-control" value="{{ data[6] if data else '' }}" required name = "region">
                                     </div>
                                 </div>
                             </div>
                            
                             <div class="form-item">
                                 <label class="form-label my-3">Address <sup>*</sup></label>
-                                <input type="text" class="form-control" required name = "address">
+                                <input type="text" class="form-control" value="{{ data[8] if data else '' }}" required name = "address">
                             </div>
                             
                             <hr>
                             <div class="form-item">
-                                <textarea  class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Notes (Optional)" name="description"></textarea>
+                                <textarea  class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Notes (Optional)" name="description" >{{ data[3] if data else '' }}</textarea>
                             </div>
                             <div class="row">
                              <div class="col-md-12 col-lg-12">
