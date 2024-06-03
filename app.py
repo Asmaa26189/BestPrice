@@ -80,8 +80,43 @@ def insert_price(itemId, marketId, price, description):
     mydb.commit()
 
 
+def update_item_All(code, name, description, qrCode, image, barcode,_id):
+    try:
+        sql = ''
+        print(sql)
+        mycursor.execute("""UPDATE items
+         SET code= %s ,name=%s, description=%s, qrCode=%s, image=%s, barcode=%s 
+         WHERE id= %s ;""", (code, name, description, qrCode,
+                                           image, barcode,_id))
+        mydb.commit()
+        # print(mycursor.rowcount, "record inserted.")
+    except Exception as e:
+        print(f"Error while connecting to MySQL: {e}")
+
+
+def update_item(code, name, description, qrCode, barcode,_id):
+    try:
+        sql = ''
+        print(sql)
+        mycursor.execute("""UPDATE items
+         SET code= %s ,name=%s, description=%s, qrCode=%s, barcode=%s 
+         WHERE id= %s ;""", (code, name, description, qrCode,barcode,_id))
+        mydb.commit()
+        # print(mycursor.rowcount, "record inserted.")
+    except Exception as e:
+        print(f"Error while connecting to MySQL: {e}")
+
+
+def update_market(code, name, description, googleLink,
+                  country, city, region, address,_id):
+    mycursor.execute("""UPDATE markets SET code = %s , name= %s, description= %s,
+     googleLink= %s, country= %s, city= %s, region= %s,address= %s 
+     WHERE id= %s;""",(code, name, description, googleLink, country, city, region, address,_id))
+    mydb.commit()
+
+
 def select_items():
-    sql = """SELECT * FROM items;"""
+    sql = """SELECT id,code,name,description,barcode,image FROM items;"""
     mycursor.execute(sql)
     myresult = mycursor.fetchall()
     # for x in myresult:
@@ -90,11 +125,11 @@ def select_items():
 
 
 def select_item(id):
-    sql = """SELECT * FROM items WHERE id = {};""".format(id)
+    sql = """SELECT id,code,name,description,barcode,image FROM items WHERE id = {};""".format(id)
     mycursor.execute(sql)
     myresult = mycursor.fetchall()
-    # for x in myresult:
-    #     print(x)
+    for x in myresult:
+        print(x)
     return list(myresult)
 
 
@@ -135,42 +170,74 @@ def select_prices(searchText):
 init_db()
 
 
-@app.route('/insertItem', methods=['POST', 'GET'])
-def insertItem():
+@app.route('/insertItem/<int:id>', methods=['POST', 'GET'])
+def insertItem(id):   
     if (request.form):
-        if 'image' not in request.files:
-            return "No image part in the request", 400
-
-        file = request.files['image']
-        if file.filename == '':
-            return "No image selected for uploading", 400
-
-        if file:
-            image_data = file.read()
         # print(request.form.get('image'))
         # with open(request.form.get('image'), 'rb') as file:
         #     binaryData = file.read()
+        if 'image' not in request.files:
+            return "No image part in the request", 400
+        file = request.files['image']
+        if id == 0:
+            if file.filename == '':
+                return "No image selected for uploading", 400
 
-        insert_item(request.form.get('code'),
-                    request.form.get('name'),
-                    request.form.get('description'),
-                    request.form.get('qrCode'),
-                    image_data, request.form.get('barcode'))
+            if file:
+                image_data = file.read()
+            insert_item(request.form.get('code'),
+                        request.form.get('name'),
+                        request.form.get('description'),
+                        request.form.get('qrCode'),
+                        image_data, request.form.get('barcode'))
+        else:
+            if file.filename == '':
+                update_item(request.form.get('code'),
+                            request.form.get('name'),
+                            request.form.get('description'),
+                            request.form.get('qrCode'),
+                            request.form.get('barcode'),
+                            id)
+            else:
+                if file.filename == '':
+                    return "No image selected for uploading", 400
+
+                if file:
+                    image_data = file.read()
+                update_item_All(request.form.get('code'),
+                                request.form.get('name'),
+                                request.form.get('description'),
+                                request.form.get('qrCode'),
+                                image_data,
+                                request.form.get('barcode'),
+                                id)
     return render_template('item.html')
 
 
-@app.route('/insertMarket', methods=['POST', 'GET'])
-def insertMarket():
+@app.route('/insertMarket/<int:id>', methods=['POST', 'GET'])
+def insertMarket(id):
     print(request.form)
     if (request.form):
-        insert_market(request.form.get('code'),
-                      request.form.get('name'),
-                      request.form.get('description'),
-                      request.form.get('googleLink'),
-                      request.form.get('country'),
-                      request.form.get('city'),
-                      request.form.get('region'),
-                      request.form.get('address'))
+        if id == 0:
+            insert_market(request.form.get('code'),
+                          request.form.get('name'),
+                          request.form.get('description'),
+                          request.form.get('googleLink'),
+                          request.form.get('country'),
+                          request.form.get('city'),
+                          request.form.get('region'),
+                          request.form.get('address'))
+        else:
+            update_market(request.form.get('code'),
+                          request.form.get('name'),
+                          request.form.get('description'),
+                          request.form.get('googleLink'),
+                          request.form.get('country'),
+                          request.form.get('city'),
+                          request.form.get('region'),
+                          request.form.get('address'),
+                          id)
+
     return render_template('market.html')
 
 
@@ -191,21 +258,19 @@ def mainUsers():
 
 @app.route('/item/<int:id>')
 def item_id(id):
-    print(id)
     data = []
     itemData = select_item(id)
     for x in itemData:
         # The returned data will be a list of list
-        image = x[6]
+        image = x[5]
         # Decode the string
         # image = base64.b64decode(image)
         image = b64encode(image).decode("utf-8")
-        data.append([x[0], x[1], x[2], x[3], x[4], x[5], image])
-        print(len(data))
-    if len(data) > 0 :
-        return render_template('item.html', data=data[0])
+        data.append([x[0], x[1], x[2], x[3], x[4], image])
+        print(x[3], x[4])
+        if len(data) > 0:
+            return render_template('item.html', data=data[0])
     return render_template('item.html')
-
 
 
 @app.route('/market/<id>', methods=['GET'])

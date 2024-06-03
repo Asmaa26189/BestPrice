@@ -18,7 +18,7 @@
         <div class="container-fluid py-5">
             <div class="container py-5">
                 <h1 class="mb-4">Market details</h1>
-                <form action="/insertMarket" method="post">
+                <form action="/insertMarket/{{ data[0] if data else 0 }}" method="post">
                     <div class="row g-5">
                         <div class="col-md-12 col-lg-12 col-xl-12">
                             <div class="row">
@@ -67,7 +67,7 @@
                             
                             <hr>
                             <div class="form-item">
-                                <textarea  class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Notes (Optional)" name="description" >{{ data[3] if data else '' }}</textarea>
+                                <textarea  id="text_area" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Notes (Optional)" name="description" >{{ data[3] if data else '' }}</textarea>
                             </div>
                             <div class="row">
                              <div class="col-md-12 col-lg-12">
