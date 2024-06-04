@@ -313,5 +313,10 @@ def addPrice():
     return render_template('addPrice.html', markets=markets, items=items)
 
 
+@app.route('/about')
+def about():
+    return render_template('contact.html')
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
