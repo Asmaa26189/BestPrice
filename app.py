@@ -7,20 +7,21 @@ from base64 import b64encode
 import mysql.connector
 
 app = Flask(__name__)
-
+#establish connection to mysql
 conn = mysql.connector.connect(host="localhost", user="root", password="root")
 cursor = conn.cursor()
-query = "DROP DATABASE BestPrice;CREATE DATABASE IF NOT EXISTS BestPrice;"
-# query = "CREATE DATBASE IF NOT EXISTS BestPrice;"
+# query = "DROP DATABASE BestPrice;CREATE DATABASE IF NOT EXISTS BestPrice;"
+# create database BestPrice
+query = "CREATE DATBASE IF NOT EXISTS BestPrice;"
 cursor.execute(query, multi=True)
-
+#establish connection to databases BestPrice
 mydb = mysql.connector.connect(host="localhost",
                                user="root",
                                password="root",
                                database="BestPrice")
 mycursor = mydb.cursor()
 
-
+# create tables for database
 def init_db():
     sql = """CREATE TABLE IF NOT EXISTS items
      (id INT AUTO_INCREMENT PRIMARY KEY,
@@ -44,6 +45,8 @@ def init_db():
     mydb.commit()
 
 
+init_db()
+# insert item
 def insert_item(code, name, description, qrCode, image, barcode):
     try:
         sql = ''
@@ -57,7 +60,7 @@ def insert_item(code, name, description, qrCode, image, barcode):
     except Exception as e:
         print(f"Error while connecting to MySQL: {e}")
 
-
+# insert market
 def insert_market(code, name, description, googleLink,
                   country, city, region, address):
     sql = """INSERT INTO markets (code, name, description,
@@ -70,7 +73,7 @@ def insert_market(code, name, description, googleLink,
     mycursor.execute(sql)
     mydb.commit()
 
-
+#insert price
 def insert_price(itemId, marketId, price, description):
     sql = """INSERT INTO prices (itemId, marketId, price, description)
                  VALUES ({}, {}, {}, '{}');""".format(itemId, marketId,
@@ -79,7 +82,7 @@ def insert_price(itemId, marketId, price, description):
     mycursor.execute(sql)
     mydb.commit()
 
-
+# update all item columns 
 def update_item_All(code, name, description, qrCode, image, barcode,_id):
     try:
         sql = ''
@@ -93,7 +96,7 @@ def update_item_All(code, name, description, qrCode, image, barcode,_id):
     except Exception as e:
         print(f"Error while connecting to MySQL: {e}")
 
-
+# update all item columns except image 
 def update_item(code, name, description, qrCode, barcode,_id):
     try:
         sql = ''
@@ -106,7 +109,7 @@ def update_item(code, name, description, qrCode, barcode,_id):
     except Exception as e:
         print(f"Error while connecting to MySQL: {e}")
 
-
+# update market
 def update_market(code, name, description, googleLink,
                   country, city, region, address,_id):
     mycursor.execute("""UPDATE markets SET code = %s , name= %s, description= %s,
@@ -114,7 +117,7 @@ def update_market(code, name, description, googleLink,
      WHERE id= %s;""",(code, name, description, googleLink, country, city, region, address,_id))
     mydb.commit()
 
-
+# select all items
 def select_items():
     sql = """SELECT id,code,name,description,barcode,image FROM items;"""
     mycursor.execute(sql)
@@ -123,7 +126,7 @@ def select_items():
     #     print(x)
     return list(myresult)
 
-
+# select one item by id
 def select_item(id):
     sql = """SELECT id,code,name,description,barcode,image FROM items WHERE id = {};""".format(id)
     mycursor.execute(sql)
@@ -132,7 +135,7 @@ def select_item(id):
         print(x)
     return list(myresult)
 
-
+# select all markets
 def select_markets():
     sql = """SELECT * FROM markets;"""
     mycursor.execute(sql)
@@ -141,7 +144,7 @@ def select_markets():
     #     print(x)
     return list(myresult)
 
-
+# select one market by id
 def select_market(id):
     sql = """SELECT * FROM markets WHERE id = {};""".format(id)
     mycursor.execute(sql)
@@ -150,7 +153,7 @@ def select_market(id):
     #     print(x)
     return list(myresult)
 
-
+# search all prices for item by name or code or barcode
 def select_prices(searchText):
     sql = """SELECT items.image, items.name,prices.price,markets.name,
             items.id as itemId ,markets.id as marketId
@@ -166,10 +169,7 @@ def select_prices(searchText):
     #     print(x)
     return list(myresult)
 
-
-init_db()
-
-
+# save item action
 @app.route('/insertItem/<int:id>', methods=['POST', 'GET'])
 def insertItem(id):   
     if (request.form):
@@ -213,7 +213,7 @@ def insertItem(id):
                                 id)
     return render_template('item.html')
 
-
+# save market action
 @app.route('/insertMarket/<int:id>', methods=['POST', 'GET'])
 def insertMarket(id):
     print(request.form)
@@ -240,7 +240,7 @@ def insertMarket(id):
 
     return render_template('market.html')
 
-
+# save price action
 @app.route('/insertPrice', methods=['POST', 'GET'])
 def insertPrice():
     if (request.form):
@@ -250,12 +250,12 @@ def insertPrice():
                      request.form.get('description'))
     return render_template('addPrice.html')
 
-
+# home page
 @app.route('/')
 def mainUsers():
     return render_template('index.html')
 
-
+# retrieve item by id
 @app.route('/item/<int:id>')
 def item_id(id):
     data = []
@@ -272,23 +272,31 @@ def item_id(id):
             return render_template('item.html', data=data[0])
     return render_template('item.html')
 
-
+# retrieve market by id
 @app.route('/market/<id>', methods=['GET'])
 def market_id(id: int):
     data = select_market(id)
     return render_template('market.html', data=data[0])
 
-
+# item page
 @app.route('/item')
 def item():
     return render_template('item.html')
 
-
+# market page
 @app.route('/market')
 def market():
     return render_template('market.html')
 
+# add price page
+@app.route('/addPrice')
+def addPrice():
+    items = select_items()
+    markets = select_markets()
+    print(items)
+    return render_template('addPrice.html', markets=markets, items=items)
 
+# search page
 @app.route('/search')
 def search():
     prices = []
@@ -304,15 +312,7 @@ def search():
             prices.append([image, data[1], data[2], data[3], data[4], data[5]])
     return render_template('search.html', prices=prices)
 
-
-@app.route('/addPrice')
-def addPrice():
-    items = select_items()
-    markets = select_markets()
-    print(items)
-    return render_template('addPrice.html', markets=markets, items=items)
-
-
+# about page
 @app.route('/about')
 def about():
     return render_template('contact.html')

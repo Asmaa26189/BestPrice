@@ -145,21 +145,16 @@
     <script type="text/javascript">
         function keySearch(obj)
         {
-            // alert('search')
 
             if (event.keyCode == 13)
             {
-                // alert("/search?searchText="+$(obj).val())
                 window.location.href = "/search?searchText="+$(obj).val();
             }
 
         }
         function buttonSearch()
         {
-
-        // alert("/search?searchText="+$(obj).val())
-        window.location.href = "/search?searchText="+$(input_search).val();
-    
+            window.location.href = "/search?searchText="+$(input_search).val();
         }
     </script>
     </body>

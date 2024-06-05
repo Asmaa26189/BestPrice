@@ -6,15 +6,8 @@
         <!-- Single Page Header start -->
         <div class="container-fluid page-header py-5" style="background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(/static/img/item1.jpg);background-repeat: round;">
             <h1 class="text-center text-white display-6">Item</h1>
-       <!--      <ol class="breadcrumb justify-content-center mb-0">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                <li class="breadcrumb-item active text-white">Item</li>
-            </ol> -->
         </div>
         <!-- Single Page Header End -->
-
-
         <!-- Item Page Start -->
         <div class="container-fluid py-5">
             <div class="container py-5">
@@ -79,18 +72,6 @@
         <!-- Item Page End -->
 
 <script type="text/javascript">
-//     function getBase64Image(img) {
-//     var canvas = document.createElement("canvas");
-//     canvas.width = img.width;
-//     canvas.height = img.height;
-
-//     var ctx = canvas.getContext("2d");
-//     ctx.drawImage(img, 0, 0);
-
-//     var dataURL = canvas.toDataURL("image/png");
-
-//     return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-// }
     function readURL(input) {
   if (input.files && input.files[0]) {
     var reader = new FileReader();
@@ -101,12 +82,6 @@
 
     reader.readAsDataURL(input.files[0]);
   }
-//   alert('x')
-//   bannerImage = document.getElementById('bannerImg');
-// imgData = getBase64Image(bannerImage);
-// alert(imgData)
-// localStorage.setItem("k.jpg", imgData);
-// alert('after')
 }
 </script>
 {% endblock %}
