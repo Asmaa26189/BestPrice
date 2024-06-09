@@ -1,7 +1,11 @@
-# Best Price Project
+# Project Name: Best Price
 ## Week 1:
 ### Making Progress
-**Project Overview:**
+**Introduction:**
+This project aims to compare item prices between different markets, to help the user to get the lowest price for the desired item.
+Link:https://github.com/Asmaa26189/BestPrice
+
+**Usage:**
 This project aims to compare item prices between different markets, to help the user to get the lowest price for the desired item.
 
 ### Goals:
@@ -19,7 +23,8 @@ Define project scope to get all prices in markets to compare accurately.
 - Javascript
 - HTML
 - CSS
-
+- Installation:pip install Flask - pip install mysql-connector - pip install base64
+  
 ### Database Tables:
 - **item**(code-name-description-qrCode-image-barcode)
 - **market**(code-name-description-googleMapLink-country-city-region-address)
@@ -73,3 +78,11 @@ Define project scope to get all prices in markets to compare accurately.
 
 ![Untitled-2](https://github.com/Asmaa26189/BestPrice/assets/108579670/990abee9-fc7e-4e99-b21c-56a6aaed8816)
 
+
+
+### Contributing:
+- Contributions are always welcome! 
+### Related projects:
+
+### Licensing:
+All right reserved
